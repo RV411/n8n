@@ -1,0 +1,175 @@
+{
+  "name": "Agente Wikipedia",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "mode": "webhook",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -560,
+        0
+      ],
+      "id": "ba0ccf2a-dd01-4d21-b820-5317e89a4e1b",
+      "name": "When chat message received",
+      "webhookId": "49fd76be-54c1-4503-b76d-cea6c53da753"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "## Objetivo Eres un asistente amable, tu nombre es Ana, ayudas a buscar información en Wikipedia. \n\n## Reglas\n-Regresa siempre respuestas de dos párrafo o menos.\n- Siempre pon las referencias de los artículos que consultas de Wikipedia. \n\n## Tools\n- Tienes una \"tool\" para conectarte a Wikipedia y traer información, puedes usarla para confirmar información"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        -352,
+        0
+      ],
+      "id": "58a763d3-463b-44cd-b66c-4c6e5e9a05a3",
+      "name": "AI Agent",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -256,
+        160
+      ],
+      "id": "63aa47a6-9844-4ec7-8e4d-14c6442026ef",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -544,
+        176
+      ],
+      "id": "afc83013-a389-49a6-bd70-4e2ed63efb01",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "cU2A19nHrI95I4L1",
+          "name": "Google AI Studio - n8n"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolWikipedia",
+      "typeVersion": 1,
+      "position": [
+        -144,
+        160
+      ],
+      "id": "c8d1aa08-86e5-46ea-a803-bfdf11141c51",
+      "name": "Wikipedia1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        -352,
+        160
+      ],
+      "id": "ca42ecae-413a-48c5-8d5a-f3f40532ddb6",
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "LgfpiZZWOHAMLMcq",
+          "name": "Ollama account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        []
+      ]
+    },
+    "Wikipedia1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1394de3d-0408-47ae-8b21-6fc798fd0911",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5464148c59fec84e7dc93a003f9dcf65a2a797d79c8210dc9826344c16edf5a9"
+  },
+  "id": "gzdDNCSJdD2qXlJ0",
+  "tags": [
+    {
+      "updatedAt": "2025-11-20T05:00:05.337Z",
+      "createdAt": "2025-11-20T05:00:05.337Z",
+      "id": "JmE9RDMxRwlPt58j",
+      "name": "six"
+    },
+    {
+      "updatedAt": "2025-11-20T05:00:09.909Z",
+      "createdAt": "2025-11-20T05:00:09.909Z",
+      "id": "pKZh5tG8OjzXCxiN",
+      "name": "agent ai"
+    }
+  ]
+}
