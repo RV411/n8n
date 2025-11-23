@@ -1,0 +1,411 @@
+{
+  "name": "Personal asist",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -544,
+        0
+      ],
+      "id": "6aaa1994-0b5f-4a2f-b915-9be6736c55cf",
+      "name": "When chat message received",
+      "webhookId": "abf520e7-eda5-4fda-9f5b-07c9f63d8433"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=# Descripción\n- Eres un asistente de AI que administra correos electrónicos y calendario de forma eficiente.\n- Tus respuestas deben ser cortas, claras y directas.\n- Prioriza siempre la organización y productividad.\n\n# Reglas de calendario\n- Horario laboral: 8am a 4pm (Lunes a Viernes).\n- No agendar fuera del horario laboral ni en fines de semana.\n- No permitir traslapes: verificar disponibilidad antes de agendar.\n- Confirmar siempre antes de crear, modificar o cancelar eventos.\n- Enviar recordatorios 15 minutos antes de cada evento.\n- Resumir eventos diarios al inicio del día y semanales los lunes a primera hora.\n\n# Reglas de correo electrónico\n- Lectura: siempre en texto plano, sin HTML.\n- Antes de enviar un correo, siempre crear un borrador (en formato HTML) y regresalo para confirmar antes de enviarlo.\n- A la hora de enviar el correo, crear su estructura con formato HTML.Con negritas, titutlo y su formato apropiado.\n- Clasificación: agrupar por prioridad (Alta > Media > Baja).\n- Ignorar: correos promocionales, spam y notificaciones irrelevantes.\n- Resumir correos importantes al inicio del día.\n- Confirmar siempre antes de eliminar o archivar correos.\n- Proponer respuestas rápidas para correos de alta prioridad.\n- No coloques \"[Tu Nombre]\", siempre pon \"Adan Rodriguez\" en su lugar.\n\n# Herramientas - Tools\n- Acceso al calendario: crear, modificar, cancelar eventos, obtener eventos, buscar eventos y toda la informacion que tenga que ver con el calendario.\n- Acceso al correo: leer, redactar, clasificar y enviar correos.\n- Puede integrarse con listas de tareas y recordatorios para mejorar la productividad.\n\n# La fecha actual es:\n{{ $now }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        -80,
+        0
+      ],
+      "id": "3caadae4-15b7-4a18-b7aa-211573a238f1",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        -512,
+        224
+      ],
+      "id": "dfc1ba0c-9312-40fb-b542-c07e9968aae9",
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "LgfpiZZWOHAMLMcq",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -192,
+        224
+      ],
+      "id": "6a2025c7-fb68-4ab3-8c96-460f345a570d",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        224
+      ],
+      "id": "c9ccea54-faac-4ff6-972d-ecaf19121a3a",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "cU2A19nHrI95I4L1",
+          "name": "Google AI Studio - n8n"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        576,
+        112
+      ],
+      "id": "99c71263-8602-470d-98ba-9ebcc48ca11b",
+      "name": "Send Gmail",
+      "webhookId": "77534e9f-4682-423c-a30d-f3ced0693bfd",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "6X2hPMKpAdJCevmU",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "emailType": "html",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        576,
+        256
+      ],
+      "id": "6cdcd00f-5055-4dc5-a5ea-9cb3bbf7d8f2",
+      "name": "Create draft",
+      "webhookId": "77534e9f-4682-423c-a30d-f3ced0693bfd",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "6X2hPMKpAdJCevmU",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        576,
+        -32
+      ],
+      "id": "b4a0de99-222e-417e-b343-ea36bf33a687",
+      "name": "Get Gmails",
+      "webhookId": "77534e9f-4682-423c-a30d-f3ced0693bfd",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "6X2hPMKpAdJCevmU",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Obtiene los pokemos desde un API",
+        "workflowId": {
+          "__rl": true,
+          "value": "Ebvaevu8kgsw0ibf",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/Ebvaevu8kgsw0ibf",
+          "cachedResultName": "Pokemon finder tool"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('name', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "name"
+          ],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        -64,
+        224
+      ],
+      "id": "d7ee1e15-8e6f-4eb3-b601-3f49abcb0b07",
+      "name": "get _pokemons"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "http://localhost:5678/mcp/84ffe032-0585-4250-abbb-57f59ca10501",
+        "include": "selected",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.2,
+      "position": [
+        64,
+        224
+      ],
+      "id": "37e10cea-558b-4586-bb26-8b75a99348e7",
+      "name": "MCP Gmail Client"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "emrg2015escom@gmail.com",
+          "mode": "list",
+          "cachedResultName": "emrg2015escom@gmail.com"
+        },
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('After', ``, 'string') }}",
+        "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Before', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        448,
+        -32
+      ],
+      "id": "12086b7c-2ace-491c-b405-65adc064f320",
+      "name": "get_events_calendar",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "VWH6Juaamrg7Dfjm",
+          "name": "Calendar - emrg2015escom@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "emrg2015escom@gmail.com",
+          "mode": "list",
+          "cachedResultName": "emrg2015escom@gmail.com"
+        },
+        "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+        "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+        "useDefaultReminders": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Use_Default_Reminders', ``, 'boolean') }}",
+        "additionalFields": {
+          "description": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Description', ``, 'string') }}",
+          "location": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Location', ``, 'string') }}",
+          "summary": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Summary', ``, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        448,
+        144
+      ],
+      "id": "4989642b-5339-4384-920d-a08f09f3220d",
+      "name": "create_events_calendar",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "VWH6Juaamrg7Dfjm",
+          "name": "Calendar - emrg2015escom@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "endpointUrl": "http://localhost:5678/mcp/1a0f8eca-0399-4e83-95a2-34eee82a8c9c",
+        "include": "selected",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        224
+      ],
+      "id": "f88e5c09-bf99-4ac7-998d-ef4f021a01ee",
+      "name": "MCP Client Calendar"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        []
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Gmail": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "Create draft": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "Get Gmails": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "get _pokemons": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Gmail Client": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_events_calendar": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "create_events_calendar": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "MCP Client Calendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "6cecc8c0-940e-4019-89c3-bcba7e2d1fa1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5464148c59fec84e7dc93a003f9dcf65a2a797d79c8210dc9826344c16edf5a9"
+  },
+  "id": "PASBuV59UNucJx94",
+  "tags": [
+    {
+      "updatedAt": "2025-11-20T05:00:05.337Z",
+      "createdAt": "2025-11-20T05:00:05.337Z",
+      "id": "JmE9RDMxRwlPt58j",
+      "name": "six"
+    },
+    {
+      "updatedAt": "2025-11-20T05:00:09.909Z",
+      "createdAt": "2025-11-20T05:00:09.909Z",
+      "id": "pKZh5tG8OjzXCxiN",
+      "name": "agent ai"
+    }
+  ]
+}
